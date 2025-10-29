@@ -1,13 +1,12 @@
-/*
-	CREATE NEW DATABASE AND SCHEMAS
+/* -------------  CREATE NEW DATABASE AND SCHEMAS  -------------- */
 	
-	Create a new database named 'datawarehouse' with the following schemas:
-	  • staging
-	  • stagecache
-	  • cache
+-- Create a new database named 'datawarehouse' with the following schemas:
+--	  • staging
+--	  • stagecache
+--	  • cache
 	
-	CAUTION: Executing this script may delete the database if it already exists on your server.
-*/
+/* -------------  CAUTION    ------------------------------------ */
+-- Executing this script may delete the database if it already exists on your server.
 
 -- This query will use the master database.
 
