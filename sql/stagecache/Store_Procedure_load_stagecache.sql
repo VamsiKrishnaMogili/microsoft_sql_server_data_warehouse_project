@@ -312,15 +312,15 @@ BEGIN
         PRINT '>> ---------------------------------------------------------------------------------------------------- <<';
         PRINT ' '
 
-        PRINT '>> stagecache.erp_loc_a101 truncate begin'
+        PRINT '>> stagecache.erp_px_cat_g1v2 truncate begin'
 
-        TRUNCATE TABLE stagecache.erp_loc_a101
+        TRUNCATE TABLE stagecache.erp_px_cat_g1v2
 
-        PRINT 'stagecache.erp_loc_a101 truncate end <<'
+        PRINT 'stagecache.erp_px_cat_g1v2 truncate end <<'
 
         SET @starttime = GETDATE()
 
-        PRINT '>> Load stagecache.erp_loc_a101 begin from staging.erp_loc_a101'
+        PRINT '>> Load stagecache.erp_px_cat_g1v2 begin from staging.erp_px_cat_g1v2'
 
         /* Load ERP product category mappings into the stage cache */
         INSERT INTO stagecache.erp_px_cat_g1v2 (id,cat,subcat,maintenance)
