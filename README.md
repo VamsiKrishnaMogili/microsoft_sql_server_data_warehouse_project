@@ -1,6 +1,6 @@
 # Dataware House Project
 Data‑migration pipeline for Microsoft SQL Server 
-CSV → Staging → StageCache → Cache
+\n CSV → Staging → StageCache → Cache
 
 This repository contains a set of T‑SQL scripts that move data from CSV files into three layers of a SQL‑Server database:
 
