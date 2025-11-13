@@ -1,53 +1,71 @@
-# Dataware House Project
-Data‑migration pipeline for Microsoft SQL Server
+# Dataware House – CSV‑to‑SQL Server Pipeline
 
-- CSV → Staging → StageCache → Cache
+A lightweight, repeatable data‑migration pipeline that loads CSV exports into a SQL Server data model.
 
-This repository contains a set of T‑SQL scripts that move data from CSV files into three layers of a SQL‑Server database:
+## Architecture
 
-- Staging – raw, one‑to‑one copy of the CSV rows
-- StageCache – cleaned / transformed copy that can be queried quickly
-- Cache – final table that is used by downstream applications
-  
-The scripts are intentionally simple and idempotent – you can run them any number of times without breaking the data flow.
+CSV files → Staging (raw, 1:1) → StageCache (cleaned, de‑duplicated) → Cache (final, analytics‑ready)
 
 
-**Project Overview**
+| Layer | Purpose | Typical Content |
+|-------|---------|-----------------|
+| **Staging** | One‑to‑one copy of the CSV rows | Raw rows, minimal transformation |
+| **StageCache** | Clean & transform | Trim whitespace, normalize dates, remove duplicates |
+| **Cache** | Final read‑optimized tables | Aggregated / fact tables for dashboards |
 
-This project focuses on building a streamlined data‑migration pipeline from CSV files to a Microsoft SQL Server database, with the data flowing through three distinct layers: **Staging**, **StageCache**, and **Cache**. The repository includes scripts for:
+> *All scripts are idempotent – you can re‑run them safely.*
 
-- **Data Architecture** – design of the three layers and their inter‑relationships.  
-- **ETL Pipelines** – extracting CSV data, loading it into **Staging**, transforming it for **StageCache**, and finally populating the **Cache** table.  
-- **Data Modeling** – defining the schema of each layer to support efficient querying.  
-- **Analytics & Reporting** – sample SQL queries and simple dashboards that read from the final **Cache** table to deliver actionable insights.
+---
 
-This repository is an excellent resource for professionals and students looking to showcase expertise in:
+## Project Overview
 
-- SQL Development  
-- Data Engineering  
-- ETL Pipeline Development  
-- Data Migration  
-- Data Modeling  
-- Data Analytics
+* **Data Architecture** – Design of the three layers and their relationships.  
+* **ETL Pipelines** – Extract CSV → Load Staging → Transform → StageCache → Load Cache.  
+* **Data Modeling** – Schema definitions that support fast querying.  
+* **Analytics & Reporting** – Sample SQL queries and dashboards built on `Cache`.
 
-**Project Requirements – Data‑Migration Pipeline**
+---
 
-Objective
-Build a robust, SQL Server‑based data‑migration pipeline that loads raw CSV files into a three‑layer data model (Staging → StageCache → Cache). The goal is to provide a clean, analytics‑ready dataset that supports fast reporting and informed decision‑making.
+## Getting Started
 
-**Specifications**
+> **Prerequisites**  
+> • Microsoft SQL Server 2019 (or later)  
+> • SQL Server Management Studio (SSMS) or Azure Data Studio  
+> • One of the supported OSes (Windows / Linux / macOS) – you’ll only run T‑SQL scripts
 
-**Data Sources** - Import sales data from CSV files (e.g., ERP exports, CRM exports). The pipeline is designed to ingest the most recent snapshot; historic archiving is not required.
+### 1. Clone the repo
+```
+git clone https://github.com/VamsiKrishnaMogili/microsoft_sql_server_data_warehouse_project.git
 
-**Data Quality** - Perform cleansing and standardisation in the Staging layer (e.g., trimming whitespace, normalising date formats). Transform and de‑duplicate rows in StageCache before loading the final Cache table.
+cd microsoft_sql_server_data_warehouse_project
+```
 
-Integration	Consolidate all source files into a single, user‑friendly schema across the three layers. The design follows a medallion‑style architecture:
-	• Staging – raw, 1:1 copy of the CSV rows.
-	• StageCache – cleaned and transformed data ready for analytics.
-	• Cache – final, aggregated tables for quick queries and dashboards.
+### 2. Create the database & schema
 
-**Scope** - Only the latest dataset is loaded each run; incremental loading or historisation is outside the scope of this repository.
+-- Run these scripts in SSMS / Azure Data Studio
 
-**Documentation** - Provide clear, concise documentation (README, schema diagrams, and usage notes) so business stakeholders and analytics teams understand the data flow and can query the Cache layer directly.
+exec sql/initial_querys/init_datawarehouse.sql
 
-This repository serves as a lightweight reference implementation for anyone needing a repeatable, maintainable data‑migration solution in Microsoft SQL Server.
+### 3. Drop in your CSV files
+
+Place the files in the datasets/ folder (one file per source).
+The script expects a header row and uses BULK INSERT.
+
+## Folder Structure
+
+```
+Dataware House – CSV‑to‑SQL Server Pipeline/
+├─ datasets/                  # Raw CSV files that will be imported
+├─ docs/
+│   ├─ SQL_PROJECT.drawio.png # Visual diagram of the pipeline (draw.io export)
+├─ sql/
+│   ├─ cache/                 # T‑SQL scripts that create and populate the Cache layer
+│   ├─ initial_querys/        # Scripts to create database and schemas
+│   ├─ stagecache/            # Scripts that clean, transform and de‑duplicate into StageCache
+│   ├─ staging/               # Scripts that bulk‑load raw CSV rows into the Staging layer
+└─ README.md                  # Project overview, usage, and documentation
+```
+
+## License
+MIT – see the LICENSE file for details.
+
